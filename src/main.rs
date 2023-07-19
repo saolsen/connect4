@@ -17,7 +17,7 @@ fn play(blue: Agent, red: Agent) -> io::Result<()> {
     let mut mat = connect4::Match::default();
     let mut state = mat.state();
     while matches!(state, MatchState::InProgress) {
-        let agent = match mat.next_player {
+        let agent = match mat.next_player() {
             Player::Blue => &blue,
             Player::Red => &red,
         };

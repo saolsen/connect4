@@ -29,7 +29,7 @@ const SIMULATIONS: i32 = 1_000;
 const SIMULATIONS: i32 = 10_000;
 
 fn score_action(current_mat: &Match, action: &Action) -> f64 {
-    let player = current_mat.next_player;
+    let player = current_mat.next_player();
 
     // Create a new match with the action applied.
     let mut next_mat = current_mat.clone();

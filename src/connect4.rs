@@ -47,8 +47,8 @@ pub enum MatchState {
 
 #[derive(Debug, Clone)]
 pub struct Match {
-    pub board: Vec<Option<Player>>,
-    pub next_player: Player,
+    board: Vec<Option<Player>>,
+    next_player: Player,
 }
 
 impl Default for Match {
@@ -61,6 +61,18 @@ impl Default for Match {
 }
 
 impl Match {
+    pub fn next_player(&self) -> Player {
+        self.next_player
+    }
+
+    pub fn get(&self, col: usize, row: usize) -> Option<Player> {
+        self.board[col * ROWS + row]
+    }
+
+    pub fn set(&mut self, col: usize, row: usize, val: Option<Player>) {
+        self.board[col * ROWS + row] = val;
+    }
+
     #[allow(clippy::identity_op)]
     pub fn state(&self) -> MatchState {
         use MatchResult::*;
@@ -69,10 +81,10 @@ impl Match {
         for col in 0..COLS {
             for row in 0..3 {
                 match (
-                    self.board[col * ROWS + row + 0],
-                    self.board[col * ROWS + row + 1],
-                    self.board[col * ROWS + row + 2],
-                    self.board[col * ROWS + row + 3],
+                    self.get(col, row + 0),
+                    self.get(col, row + 1),
+                    self.get(col, row + 2),
+                    self.get(col, row + 3),
                 ) {
                     (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => {
                         return Over(Winner(i))
@@ -86,10 +98,10 @@ impl Match {
         for row in 0..ROWS {
             for col in 0..4 {
                 match (
-                    self.board[(col + 0) * ROWS + row],
-                    self.board[(col + 1) * ROWS + row],
-                    self.board[(col + 2) * ROWS + row],
-                    self.board[(col + 3) * ROWS + row],
+                    self.get(col + 0, row),
+                    self.get(col + 1, row),
+                    self.get(col + 2, row),
+                    self.get(col + 3, row),
                 ) {
                     (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => {
                         return Over(Winner(i))
@@ -103,10 +115,10 @@ impl Match {
         for col in 0..4 {
             for row in 0..3 {
                 match (
-                    self.board[(col + 0) * ROWS + row + 0],
-                    self.board[(col + 1) * ROWS + row + 1],
-                    self.board[(col + 2) * ROWS + row + 2],
-                    self.board[(col + 3) * ROWS + row + 3],
+                    self.get(col + 0, row + 0),
+                    self.get(col + 1, row + 1),
+                    self.get(col + 2, row + 2),
+                    self.get(col + 3, row + 3),
                 ) {
                     (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => {
                         return Over(Winner(i))
@@ -120,10 +132,10 @@ impl Match {
         for col in 0..4 {
             for row in 3..6 {
                 match (
-                    self.board[(col + 0) * ROWS + row - 0],
-                    self.board[(col + 1) * ROWS + row - 1],
-                    self.board[(col + 2) * ROWS + row - 2],
-                    self.board[(col + 3) * ROWS + row - 3],
+                    self.get(col + 0, row - 0),
+                    self.get(col + 1, row - 1),
+                    self.get(col + 2, row - 2),
+                    self.get(col + 3, row - 3),
                 ) {
                     (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => {
                         return Over(Winner(i))
@@ -135,7 +147,7 @@ impl Match {
 
         // Check for tie
         for col in 0..COLS {
-            if self.board[col * ROWS + ROWS - 1].is_none() {
+            if self.get(col, ROWS - 1).is_none() {
                 return InProgress;
             }
         }
@@ -147,7 +159,7 @@ impl Match {
         if action.column >= COLS {
             return false;
         }
-        self.board[action.column * ROWS + ROWS - 1].is_none()
+        self.get(action.column, ROWS - 1).is_none()
     }
 
     pub fn apply_action(&mut self, action: &Action) -> Result<MatchState, ActionError> {
@@ -156,9 +168,8 @@ impl Match {
             return Err(UnknownColumn(action.column));
         }
         for row in 0..ROWS {
-            let cell = &mut self.board[action.column * ROWS + row];
-            if cell.is_none() {
-                *cell = Some(self.next_player);
+            if self.get(action.column, row).is_none() {
+                self.set(action.column, row, Some(self.next_player));
                 self.next_player = self.next_player.next();
                 return Ok(self.state());
             }

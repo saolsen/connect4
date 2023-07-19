@@ -42,7 +42,7 @@ pub fn show_match(mat: &Match, your_turn: bool) -> io::Result<()> {
     let state = mat.state();
     match state {
         MatchState::InProgress => {
-            match mat.next_player {
+            match mat.next_player() {
                 Player::Blue => {
                     queue!(
                         stdout,
@@ -115,9 +115,9 @@ pub fn show_match(mat: &Match, your_turn: bool) -> io::Result<()> {
         cursor::MoveToNextLine(1)
     )?;
     for row in (0..ROWS).rev() {
-        for column in 0..COLS {
+        for col in 0..COLS {
             queue!(stdout, style::Print("| "))?;
-            match mat.board[column * ROWS + row] {
+            match mat.get(col, row) {
                 Some(Player::Blue) => {
                     queue!(
                         stdout,
