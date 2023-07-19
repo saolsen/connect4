@@ -1,8 +1,13 @@
 # Connect4 Monte-Carlo Tree Search
 
-Agents that play connect4.
-One that takes random moves and one that uses mcts.
-Includes cli for playing against the agents.
+Play against an MCTS connect4 agent in your terminal.
+
+<img width="290" alt="CleanShot 2023-07-18 at 19 45 18@2x" src="https://github.com/saolsen/connect4/assets/508702/e2356bb4-a8d1-4ab1-a54c-d161e2f8e2ef">
+
+
+Includes two agents that play connect4.
+* Random agent that makes random moves.
+* MCTS agent that simulates thousands of games to pick the best move.
 
 ## Dependencies
 
@@ -14,5 +19,4 @@ Includes cli for playing against the agents.
 cargo run --release
 ```
 
-For best result run in relase mode.
-More games are simulated so the agent will be smarter.
+Run it in release mode. More games are simulated so the agent is smarter.
