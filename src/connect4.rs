@@ -60,6 +60,18 @@ impl Default for Match {
     }
 }
 
+fn check4(
+    a: Option<Player>,
+    b: Option<Player>,
+    c: Option<Player>,
+    d: Option<Player>,
+) -> Option<Player> {
+    match (a, b, c, d) {
+        (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => return Some(i),
+        _ => None,
+    }
+}
+
 impl Match {
     pub fn next_player(&self) -> Player {
         self.next_player
@@ -80,16 +92,13 @@ impl Match {
         // Check vertical wins
         for col in 0..COLS {
             for row in 0..3 {
-                match (
+                if let Some(player) = check4(
                     self.get(col, row + 0),
                     self.get(col, row + 1),
                     self.get(col, row + 2),
                     self.get(col, row + 3),
                 ) {
-                    (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => {
-                        return Over(Winner(i))
-                    }
-                    _ => (),
+                    return Over(Winner(player));
                 }
             }
         }
@@ -97,16 +106,13 @@ impl Match {
         // Check horizontal wins
         for row in 0..ROWS {
             for col in 0..4 {
-                match (
+                if let Some(player) = check4(
                     self.get(col + 0, row),
                     self.get(col + 1, row),
                     self.get(col + 2, row),
                     self.get(col + 3, row),
                 ) {
-                    (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => {
-                        return Over(Winner(i))
-                    }
-                    _ => (),
+                    return Over(Winner(player));
                 }
             }
         }
@@ -114,16 +120,13 @@ impl Match {
         // Check diagonal up wins
         for col in 0..4 {
             for row in 0..3 {
-                match (
+                if let Some(player) = check4(
                     self.get(col + 0, row + 0),
                     self.get(col + 1, row + 1),
                     self.get(col + 2, row + 2),
                     self.get(col + 3, row + 3),
                 ) {
-                    (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => {
-                        return Over(Winner(i))
-                    }
-                    _ => (),
+                    return Over(Winner(player));
                 }
             }
         }
@@ -131,16 +134,13 @@ impl Match {
         // Check diagonal down wins
         for col in 0..4 {
             for row in 3..6 {
-                match (
+                if let Some(player) = check4(
                     self.get(col + 0, row - 0),
                     self.get(col + 1, row - 1),
                     self.get(col + 2, row - 2),
                     self.get(col + 3, row - 3),
                 ) {
-                    (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => {
-                        return Over(Winner(i))
-                    }
-                    _ => (),
+                    return Over(Winner(player));
                 }
             }
         }
