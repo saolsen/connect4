@@ -1,0 +1,9 @@
+[package]
+name = "connect4"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+crossterm = "0.26.1"
+rand = "0.8.5"
+thiserror = "1.0.43"
