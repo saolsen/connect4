@@ -67,7 +67,7 @@ fn check4(
     d: Option<Player>,
 ) -> Option<Player> {
     match (a, b, c, d) {
-        (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => return Some(i),
+        (Some(i), Some(j), Some(k), Some(l)) if i == j && j == k && k == l => Some(i),
         _ => None,
     }
 }
