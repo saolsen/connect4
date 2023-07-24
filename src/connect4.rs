@@ -1,4 +1,3 @@
-use crate::connect4::Player::Blue;
 use thiserror::Error;
 
 pub const ROWS: usize = 6;
@@ -55,7 +54,7 @@ impl Default for Match {
     fn default() -> Self {
         Self {
             board: vec![None; ROWS * COLS],
-            next_player: Blue,
+            next_player: Player::Blue,
         }
     }
 }
